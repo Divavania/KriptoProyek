@@ -50,7 +50,7 @@ def aes_decrypt(base64_text, key):
     return unpad(decrypted, AES.block_size).decode()
 
 # --- Streamlit UI ---
-st.title("🔐 Aplikasi Enkripsi & Dekripsi 2 Lapisan (Vigenère → AES → Caesar)")
+st.title("🔐 Aplikasi Enkripsi & Dekripsi 3 Lapisan (Vigenère → AES → Caesar)")
 
 uploaded_file = st.file_uploader("📂 Upload file (.txt)", type=["txt"])
 key = st.text_input("🔑 Masukkan Kunci (Digunakan untuk semua lapisan)")
