@@ -71,122 +71,159 @@ st.set_page_config(
     page_title="🔐 Enkripsi 3 Lapisan",
     page_icon="🔒",
     layout="centered",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
-# Custom CSS untuk mempercantik tampilan
+# Custom CSS untuk tampilan dinamis dan tidak monoton
 st.markdown("""
     <style>
     .main {
-        background-color: #f0f2f6;
-        padding: 20px;
-        border-radius: 10px;
+        background: linear-gradient(135deg, #e0f7fa 0%, #f0f2f6 100%);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     .stButton>button {
-        background-color: #4CAF50;
+        background: linear-gradient(45deg, #4CAF50, #66BB6A);
         color: white;
-        border-radius: 8px;
-        padding: 10px 20px;
+        border-radius: 10px;
+        padding: 12px 24px;
         font-weight: bold;
+        transition: transform 0.2s ease-in-out;
     }
     .stButton>button:hover {
-        background-color: #45a049;
+        background: linear-gradient(45deg, #45a049, #5cb860);
+        transform: scale(1.05);
     }
     .stTextInput>div>div>input {
-        border: 2px solid #4CAF50;
-        border-radius: 8px;
+        border: 2px solid #26A69A;
+        border-radius: 10px;
+        padding: 10px;
+        background-color: #ffffff;
     }
     .stFileUploader>div>div>input {
-        border: 2px solid #4CAF50;
-        border-radius: 8px;
+        border: 2px solid #26A69A;
+        border-radius: 10px;
+        padding: 10px;
     }
     .stRadio>div {
         background-color: #ffffff;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #4CAF50;
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px solid #26A69A;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .stTextArea textarea {
-        border: 2px solid #4CAF50;
-        border-radius: 8px;
+        border: 2px solid #26A69A;
+        border-radius: 10px;
         background-color: #ffffff;
+        font-family: 'Courier New', Courier, monospace;
     }
     .title {
-        font-size: 2.5em;
-        color: #2e7d32;
+        font-size: 2.8em;
+        color: #00695C;
         text-align: center;
         margin-bottom: 20px;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
     .subtitle {
-        font-size: 1.2em;
-        color: #555555;
+        font-size: 1.3em;
+        color: #37474F;
         text-align: center;
         margin-bottom: 30px;
+        font-style: italic;
     }
     .success-box {
-        background-color: #e8f5e9;
-        padding: 10px;
-        border-radius: 8px;
+        background: linear-gradient(45deg, #e8f5e9, #c8e6c9);
+        padding: 15px;
+        border-radius: 10px;
         border: 1px solid #4CAF50;
+        color: #2e7d32;
+        font-weight: bold;
+        animation: fadeIn 0.5s;
     }
     .error-box {
-        background-color: #ffebee;
-        padding: 10px;
-        border-radius: 8px;
+        background: linear-gradient(45deg, #ffebee, #ffcdd2);
+        padding: 15px;
+        border-radius: 10px;
         border: 1px solid #d32f2f;
+        color: #b71c1c;
+        font-weight: bold;
+        animation: fadeIn 0.5s;
+    }
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(-10px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    .section-divider {
+        border-top: 2px dashed #26A69A;
+        margin: 20px 0;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # Judul dan Deskripsi
-st.markdown('<div class="title">🔐 Aplikasi Enkripsi & Dekripsi 3 Lapisan</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Amankan data Anda dengan Vigenère → AES → Caesar Cipher</div>', unsafe_allow_html=True)
+st.markdown('<div class="title">🔐 Enkripsi & Dekripsi 3 Lapisan</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Lindungi Data Anda dengan Vigenère → AES → Caesar Cipher</div>', unsafe_allow_html=True)
 
-# Sidebar untuk informasi tambahan
-with st.sidebar:
-    st.header("ℹ️ Tentang Aplikasi")
-    st.write("""
-        Aplikasi ini mengenkripsi atau mendekripsi file teks menggunakan tiga lapisan keamanan:
-        1. **Vigenère Cipher**: Enkripsi berbasis kunci huruf.
-        2. **AES**: Algoritma enkripsi simetris modern.
-        3. **Caesar Cipher**: Pergeseran karakter berbasis panjang kunci.
-        Masukkan kunci yang sama untuk enkripsi dan dekripsi.
-    """)
-    st.markdown("---")
-    st.write("**Catatan Keamanan**: Gunakan kunci yang kuat dan simpan dengan aman!")
+# Pemisah visual
+st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
 # Form untuk input pengguna
-with st.form(key="crypto_form"):
-    uploaded_file = st.file_uploader("📂 Upload File Teks (.txt)", type=["txt"], help="Pilih file teks yang ingin dienkripsi atau didekripsi")
-    key = st.text_input("🔑 Masukkan Kunci", type="password", help="Kunci digunakan untuk semua lapisan enkripsi")
-    mode = st.radio("Pilih Mode:", ["Enkripsi", "Dekripsi"], help="Pilih apakah akan mengenkripsi atau mendekripsi file")
-    submit_button = st.form_submit_button("🚀 Proses Sekarang")
+with st.container():
+    st.markdown("### 📥 Masukkan Data Anda")
+    with st.form(key="crypto_form"):
+        uploaded_file = st.file_uploader(
+            "📂 Upload File Teks (.txt)",
+            type=["txt"],
+            help="Pilih file teks yang ingin dienkripsi atau didekripsi"
+        )
+        key = st.text_input(
+            "🔑 Masukkan Kunci",
+            type="password",
+            help="Kunci digunakan untuk semua lapisan enkripsi. Pastikan kunci aman!"
+        )
+        mode = st.radio(
+            "Pilih Mode:",
+            ["Enkripsi", "Dekripsi"],
+            help="Pilih apakah akan mengenkripsi atau mendekripsi file",
+            horizontal=True
+        )
+        submit_button = st.form_submit_button("🚀 Proses Sekarang")
 
 # Logika pemrosesan
 if uploaded_file and key and submit_button:
     content = uploaded_file.read().decode('utf-8')
     
-    with st.spinner("🔄 Memproses..."):
+    with st.spinner("🔄 Sedang Memproses Data..."):
         try:
             if mode == "Enkripsi":
                 step1 = vigenere_encrypt(content, key)
                 step2 = aes_encrypt(step1, key)
                 result = caesar_encrypt(step2, key)
-                st.markdown('<div class="success-box">✅ Enkripsi Berhasil!</div>', unsafe_allow_html=True)
+                st.markdown('<div class="success-box">✅ Enkripsi Berhasil! Data Anda telah diamankan.</div>', unsafe_allow_html=True)
             else:
                 step1 = caesar_decrypt(content, key)
                 step2 = aes_decrypt(step1, key)
                 result = vigenere_decrypt(step2, key)
-                st.markdown('<div class="success-box">✅ Dekripsi Berhasil!</div>', unsafe_allow_html=True)
+                st.markdown('<div class="success-box">✅ Dekripsi Berhasil! Data Anda telah dipulihkan.</div>', unsafe_allow_html=True)
 
-            st.subheader("📄 Hasil")
-            st.text_area("Hasil Pemrosesan:", result, height=200)
+            st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
+            st.markdown("### 📄 Hasil Pemrosesan")
+            st.text_area(
+                "Hasil:",
+                result,
+                height=250,
+                help="Hasil enkripsi atau dekripsi ditampilkan di sini"
+            )
             st.download_button(
                 label="⬇️ Download Hasil",
                 data=result,
                 file_name="output.txt",
                 mime="text/plain",
-                help="Unduh hasil sebagai file teks"
+                help="Unduh hasil sebagai file teks",
+                key="download_button"
             )
         except Exception as e:
             st.markdown(f'<div class="error-box">❌ Terjadi kesalahan: {e}</div>', unsafe_allow_html=True)
