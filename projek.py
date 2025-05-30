@@ -74,54 +74,76 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS untuk tampilan dinamis dan tidak monoton
+# Theme-agnostic CSS using Streamlit's theme variables
 st.markdown("""
     <style>
+    :root {
+        --primary-bg: var(--st-background-color, #f0f2f6);
+        --secondary-bg: var(--st-secondary-background-color, #e0f7fa);
+        --text-color: var(--st-text-color, #262730);
+        --accent-color: var(--st-primary, #ff4b4b);
+        --input-bg: var(--st-secondary-background-color, #ffffff);
+        --input-border: var(--st-primary, #26A69A);
+        --button-bg: var(--st-primary, #4CAF50);
+        --button-text: var(--st-button-text-color, #ffffff);
+        --success-bg: var(--st-success-background-color, #e8f5e9);
+        --success-text: var(--st-success-text-color, #2e7d32);
+        --error-bg: var(--st-error-background-color, #ffebee);
+        --error-text: var(--st-error-text-color, #b71c1c);
+        --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
     .main {
-        background: linear-gradient(135deg, #e0f7fa 0%, #f0f2f6 100%);
+        background: var(--primary-bg);
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow);
     }
     .stButton>button {
-        background: linear-gradient(45deg, #4CAF50, #66BB6A);
-        color: white;
+        background: var(--button-bg);
+        color: var(--button-text);
         border-radius: 10px;
         padding: 12px 24px;
         font-weight: bold;
-        transition: transform 0.2s ease-in-out;
+        transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+        border: none;
     }
     .stButton>button:hover {
-        background: linear-gradient(45deg, #45a049, #5cb860);
+        opacity: 0.9;
         transform: scale(1.05);
     }
     .stTextInput>div>div>input {
-        border: 2px solid #26A69A;
+        border: 2px solid var(--input-border);
         border-radius: 10px;
         padding: 10px;
-        background-color: #ffffff;
+        background-color: var(--input-bg);
+        color: var(--text-color);
     }
-    .stFileUploader>div>div>input {
-        border: 2px solid #26A69A;
+    .stFileUploader>div {
+        border: 2px solid var(--input-border);
         border-radius: 10px;
         padding: 10px;
+        background-color: var(--input-bg);
+        color: var(--text-color);
     }
     .stRadio>div {
-        background-color: #ffffff;
+        background-color: var(--input-bg);
         padding: 15px;
         border-radius: 10px;
-        border: 2px solid #26A69A;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 2px solid var(--input-border);
+        box-shadow: var(--shadow);
+        color: var(--text-color);
     }
     .stTextArea textarea {
-        border: 2px solid #26A69A;
+        border: 2px solid var(--input-border);
         border-radius: 10px;
-        background-color: #ffffff;
+        background-color: var(--input-bg);
+        color: var(--text-color);
         font-family: 'Courier New', Courier, monospace;
     }
     .title {
         font-size: 2.8em;
-        color: #00695C;
+        color: var(--text-color);
         text-align: center;
         margin-bottom: 20px;
         font-weight: bold;
@@ -129,26 +151,27 @@ st.markdown("""
     }
     .subtitle {
         font-size: 1.3em;
-        color: #37474F;
+        color: var(--text-color);
         text-align: center;
         margin-bottom: 30px;
         font-style: italic;
+        opacity: 0.8;
     }
     .success-box {
-        background: linear-gradient(45deg, #e8f5e9, #c8e6c9);
+        background: var(--success-bg);
         padding: 15px;
         border-radius: 10px;
-        border: 1px solid #4CAF50;
-        color: #2e7d32;
+        border: 1px solid var(--success-text);
+        color: var(--success-text);
         font-weight: bold;
         animation: fadeIn 0.5s;
     }
     .error-box {
-        background: linear-gradient(45deg, #ffebee, #ffcdd2);
+        background: var(--error-bg);
         padding: 15px;
         border-radius: 10px;
-        border: 1px solid #d32f2f;
-        color: #b71c1c;
+        border: 1px solid var(--error-text);
+        color: var(--error-text);
         font-weight: bold;
         animation: fadeIn 0.5s;
     }
@@ -157,7 +180,7 @@ st.markdown("""
         100% { opacity: 1; transform: translateY(0); }
     }
     .section-divider {
-        border-top: 2px dashed #26A69A;
+        border-top: 2px dashed var(--input-border);
         margin: 20px 0;
     }
     </style>
