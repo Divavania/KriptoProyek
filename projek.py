@@ -74,45 +74,23 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Updated CSS for theme responsiveness
+# Theme-agnostic CSS using Streamlit's theme variables
 st.markdown("""
     <style>
     :root {
-        --primary-bg: #e0f7fa;
-        --secondary-bg: #f0f2f6;
-        --text-color: #00695C;
-        --subtitle-color: #37474F;
-        --button-bg: #4CAF50;
-        --button-hover-bg: #45a049;
-        --input-border: #26A69A;
-        --success-bg: #e8f5e9;
-        --success-border: #4CAF50;
-        --success-text: #2e7d32;
-        --error-bg: #ffebee;
-        --error-border: #d32f2f;
-        --error-text: #b71c1c;
-        --input-bg: #ffffff;
+        --primary-bg: var(--st-background-color, #f0f2f6);
+        --text-color: var(--st-text-color, #262730);
+        --accent-color: var(--st-primary, #ff4b4b);
+        --secondary-bg: var(--st-secondary-background-color, #f0f2f6);
+        --input-bg: var(--st-secondary-background-color, #ffffff);
+        --input-border: var(--st-primary, #26A69A);
+        --button-bg: var(--st-primary, #4CAF50);
+        --button-text: var(--st-button-text-color, #ffffff);
+        --success-bg: var(--st-success-background-color, #e8f5e9);
+        --success-text: var(--st-success-text-color, #2e7d32);
+        --error-bg: var(--st-error-background-color, #ffebee);
+        --error-text: var(--st-error-text-color, #b71c1c);
         --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --primary-bg: #1a1a1a;
-            --secondary-bg: #2c2c2c;
-            --text-color: #4FC3F7;
-            --subtitle-color: #B0BEC5;
-            --button-bg: #66BB6A;
-            --button-hover-bg: #5cb860;
-            --input-border: #4FC3F7;
-            --success-bg: #2e7d32;
-            --success-border: #4CAF50;
-            --success-text: #ffffff;
-            --error-bg: #d32f2f;
-            --error-border: #ef5350;
-            --error-text: #ffffff;
-            --input-bg: #333333;
-            --shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
     }
 
     .main {
@@ -122,16 +100,16 @@ st.markdown("""
         box-shadow: var(--shadow);
     }
     .stButton>button {
-        background: linear-gradient(45deg, var(--button-bg), var(--button-hover-bg));
-        color: white;
+        background: var(--button-bg);
+        color: var(--button-text);
         border-radius: 10px;
         padding: 12px 24px;
         font-weight: bold;
-        transition: transform 0.2s ease-in-out;
+        transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
         border: none;
     }
     .stButton>button:hover {
-        background: linear-gradient(45deg, var(--button-hover-bg), var(--button-bg));
+        opacity: 0.9;
         transform: scale(1.05);
     }
     .stTextInput>div>div>input {
@@ -141,7 +119,7 @@ st.markdown("""
         background-color: var(--input-bg);
         color: var(--text-color);
     }
-    .stFileUploader>div>div>input {
+    .stFileUploader>div {
         border: 2px solid var(--input-border);
         border-radius: 10px;
         padding: 10px;
@@ -173,25 +151,26 @@ st.markdown("""
     }
     .subtitle {
         font-size: 1.3em;
-        color: var(--subtitle-color);
+        color: var(--text-color);
         text-align: center;
         margin-bottom: 30px;
         font-style: italic;
+        opacity: 0.8;
     }
     .success-box {
-        background: linear-gradient(45deg, var(--success-bg), var(--success-bg));
+        background: var(--success-bg);
         padding: 15px;
         border-radius: 10px;
-        border: 1px solid var(--success-border);
+        border: 1px solid var(--success-text);
         color: var(--success-text);
         font-weight: bold;
         animation: fadeIn 0.5s;
     }
     .error-box {
-        background: linear-gradient(45deg, var(--error-bg), var(--error-bg));
+        background: var(--error-bg);
         padding: 15px;
         border-radius: 10px;
-        border: 1px solid var(--error-border);
+        border: 1px solid var(--error-text);
         color: var(--error-text);
         font-weight: bold;
         animation: fadeIn 0.5s;
