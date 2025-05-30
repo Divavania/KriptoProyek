@@ -74,54 +74,98 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS untuk tampilan dinamis dan tidak monoton
+# Updated CSS for theme responsiveness
 st.markdown("""
     <style>
+    :root {
+        --primary-bg: #e0f7fa;
+        --secondary-bg: #f0f2f6;
+        --text-color: #00695C;
+        --subtitle-color: #37474F;
+        --button-bg: #4CAF50;
+        --button-hover-bg: #45a049;
+        --input-border: #26A69A;
+        --success-bg: #e8f5e9;
+        --success-border: #4CAF50;
+        --success-text: #2e7d32;
+        --error-bg: #ffebee;
+        --error-border: #d32f2f;
+        --error-text: #b71c1c;
+        --input-bg: #ffffff;
+        --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --primary-bg: #1a1a1a;
+            --secondary-bg: #2c2c2c;
+            --text-color: #4FC3F7;
+            --subtitle-color: #B0BEC5;
+            --button-bg: #66BB6A;
+            --button-hover-bg: #5cb860;
+            --input-border: #4FC3F7;
+            --success-bg: #2e7d32;
+            --success-border: #4CAF50;
+            --success-text: #ffffff;
+            --error-bg: #d32f2f;
+            --error-border: #ef5350;
+            --error-text: #ffffff;
+            --input-bg: #333333;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+    }
+
     .main {
-        background: linear-gradient(135deg, #e0f7fa 0%, #f0f2f6 100%);
+        background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow);
     }
     .stButton>button {
-        background: linear-gradient(45deg, #4CAF50, #66BB6A);
+        background: linear-gradient(45deg, var(--button-bg), var(--button-hover-bg));
         color: white;
         border-radius: 10px;
         padding: 12px 24px;
         font-weight: bold;
         transition: transform 0.2s ease-in-out;
+        border: none;
     }
     .stButton>button:hover {
-        background: linear-gradient(45deg, #45a049, #5cb860);
+        background: linear-gradient(45deg, var(--button-hover-bg), var(--button-bg));
         transform: scale(1.05);
     }
     .stTextInput>div>div>input {
-        border: 2px solid #26A69A;
+        border: 2px solid var(--input-border);
         border-radius: 10px;
         padding: 10px;
-        background-color: #ffffff;
+        background-color: var(--input-bg);
+        color: var(--text-color);
     }
     .stFileUploader>div>div>input {
-        border: 2px solid #26A69A;
+        border: 2px solid var(--input-border);
         border-radius: 10px;
         padding: 10px;
+        background-color: var(--input-bg);
+        color: var(--text-color);
     }
     .stRadio>div {
-        background-color: #ffffff;
+        background-color: var(--input-bg);
         padding: 15px;
         border-radius: 10px;
-        border: 2px solid #26A69A;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 2px solid var(--input-border);
+        box-shadow: var(--shadow);
+        color: var(--text-color);
     }
     .stTextArea textarea {
-        border: 2px solid #26A69A;
+        border: 2px solid var(--input-border);
         border-radius: 10px;
-        background-color: #ffffff;
+        background-color: var(--input-bg);
+        color: var(--text-color);
         font-family: 'Courier New', Courier, monospace;
     }
     .title {
         font-size: 2.8em;
-        color: #00695C;
+        color: var(--text-color);
         text-align: center;
         margin-bottom: 20px;
         font-weight: bold;
@@ -129,26 +173,26 @@ st.markdown("""
     }
     .subtitle {
         font-size: 1.3em;
-        color: #37474F;
+        color: var(--subtitle-color);
         text-align: center;
         margin-bottom: 30px;
         font-style: italic;
     }
     .success-box {
-        background: linear-gradient(45deg, #e8f5e9, #c8e6c9);
+        background: linear-gradient(45deg, var(--success-bg), var(--success-bg));
         padding: 15px;
         border-radius: 10px;
-        border: 1px solid #4CAF50;
-        color: #2e7d32;
+        border: 1px solid var(--success-border);
+        color: var(--success-text);
         font-weight: bold;
         animation: fadeIn 0.5s;
     }
     .error-box {
-        background: linear-gradient(45deg, #ffebee, #ffcdd2);
+        background: linear-gradient(45deg, var(--error-bg), var(--error-bg));
         padding: 15px;
         border-radius: 10px;
-        border: 1px solid #d32f2f;
-        color: #b71c1c;
+        border: 1px solid var(--error-border);
+        color: var(--error-text);
         font-weight: bold;
         animation: fadeIn 0.5s;
     }
@@ -157,7 +201,7 @@ st.markdown("""
         100% { opacity: 1; transform: translateY(0); }
     }
     .section-divider {
-        border-top: 2px dashed #26A69A;
+        border-top: 2px dashed var(--input-border);
         margin: 20px 0;
     }
     </style>
