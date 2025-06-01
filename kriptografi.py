@@ -9,6 +9,7 @@ def vigenere_encrypt(plaintext, key):
     encrypted = []
     key = key.upper()
     key_index = 0
+
     for char in plaintext:
         if char.isalpha():
             shift = ord(key[key_index % len(key)]) - ord('A')
@@ -24,6 +25,7 @@ def vigenere_decrypt(ciphertext, key):
     decrypted = []
     key = key.upper()
     key_index = 0
+
     for char in ciphertext:
         if char.isalpha():
             shift = ord(key[key_index % len(key)]) - ord('A')
@@ -49,6 +51,21 @@ def aes_decrypt(base64_text, key):
     decrypted = cipher.decrypt(base64.b64decode(base64_text))
     return unpad(decrypted, AES.block_size).decode()
 
+# --- Caesar Cipher ---
+def caesar_encrypt(text, key):
+    shift = len(key)
+    result = ""
+    for char in text:
+        result += chr((ord(char) + shift) % 256)
+    return result
+
+def caesar_decrypt(text, key):
+    shift = len(key)
+    result = ""
+    for char in text:
+        result += chr((ord(char) - shift) % 256)
+    return result
+
 # --- Streamlit UI ---
 st.title("🔐 Aplikasi Enkripsi & Dekripsi 3 Lapisan (Vigenère → AES → Caesar)")
 
@@ -62,28 +79,40 @@ if uploaded_file and key:
     if st.button("🚀 Proses Sekarang"):
         try:
             if mode == "Enkripsi":
-
+                # Step 1: Vigenère
                 step1 = vigenere_encrypt(content, key)
                 st.text_area("🔐 Hasil Enkripsi Vigenère:", step1, height=150)
 
-                result = aes_encrypt(step1, key)
-                st.text_area("🔐 Hasil Enkripsi AES :", result, height=150)
+                # Step 2: AES
+                step2 = aes_encrypt(step1, key)
+                st.text_area("🔐 Hasil Enkripsi AES (Base64):", step2, height=150)
 
-                st.text_area("📄 Hasil Akhir (Gabungan Vigenère → AES):", result, height=200)
+                # Step 3: Caesar
+                result = caesar_encrypt(step2, key)
+                st.text_area("🔐 Hasil Enkripsi Caesar (Final):", result, height=150)
+
+                st.text_area("📄 Hasil Akhir (Gabungan 3 Lapisan):", result, height=200)
 
                 st.success("✅ Enkripsi Berhasil!")
 
-            else:
-                step1 = aes_decrypt(content, key)
-                st.text_area("🔓 Hasil Dekripsi AES:", step1, height=150)
+            else:  # Dekripsi
+                # Step 1: Caesar
+                step1 = caesar_decrypt(content, key)
+                st.text_area("🔓 Hasil Dekripsi Caesar:", step1, height=150)
 
-                result = vigenere_decrypt(step1, key)
-                st.text_area("🔓 Hasil Dekripsi Vigenère :", result, height=150)
+                # Step 2: AES
+                step2 = aes_decrypt(step1, key)
+                st.text_area("🔓 Hasil Dekripsi AES:", step2, height=150)
 
-                st.text_area("📄 Hasil Akhir (Gabungan AES → Vigenère):", result, height=200)
+                # Step 3: Vigenère
+                result = vigenere_decrypt(step2, key)
+                st.text_area("🔓 Hasil Dekripsi Vigenère (Final):", result, height=150)
+
+                st.text_area("📄 Hasil Akhir (Gabungan 3 Lapisan):", result, height=200)
 
                 st.success("✅ Dekripsi Berhasil!")
 
+            # Tombol download untuk hasil AKHIR
             st.download_button("⬇ Download Hasil Akhir", data=result, file_name="output.txt", mime="text/plain")
 
         except Exception as e:
