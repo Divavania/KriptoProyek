@@ -4,33 +4,63 @@ from Crypto.Util.Padding import pad, unpad
 import base64
 import hashlib
 
-# --- Vigenère Cipher (Simplified) ---
+# --- Vigenère Cipher ---
 def vigenere_encrypt(plaintext, key):
-    key = key.upper()
+    # Buat daftar kosong encrypted untuk simpan hasil enkripsi.
     encrypted = []
-    key_length = len(key)
-    
-    for i, char in enumerate(plaintext):
+    # Ubah kunci ke huruf kapital untuk konsistensi.
+    key = key.upper()
+    # Inisialisasi key_index untuk lacak posisi karakter kunci.
+    key_index = 0
+
+    # Iterasi setiap karakter di plaintext.
+    for char in plaintext:
+        # Periksa apakah karakter adalah huruf alfabet.
         if char.isalpha():
-            shift = ord(key[i % key_length]) - ord('A')
+            # Hitung geseran: nilai ASCII karakter kunci dikurangi ASCII 'A'.
+            shift = ord(key[key_index % len(key)]) - ord('A')
+            # Tentukan base: ASCII 'A' (kapital) atau 'a' (kecil).
             base = ord('A') if char.isupper() else ord('a')
-            encrypted.append(chr((ord(char) - base + shift) % 26 + base))
+            # Enkripsi: geser karakter, modulo 26, ubah kembali ke karakter.
+            encrypted_char = chr((ord(char) - base + shift) % 26 + base)
+            # Tambah karakter terenkripsi ke encrypted.
+            encrypted.append(encrypted_char)
+            # Tambah key_index untuk karakter kunci berikutnya.
+            key_index += 1
+        # Jika bukan alfabet:
         else:
+            # Tambah karakter langsung ke encrypted tanpa perubahan.
             encrypted.append(char)
+    # Gabungkan encrypted jadi string hasil enkripsi.
     return ''.join(encrypted)
 
 def vigenere_decrypt(ciphertext, key):
-    key = key.upper()
+    # Buat daftar kosong decrypted untuk simpan hasil dekripsi.
     decrypted = []
-    key_length = len(key)
-    
-    for i, char in enumerate(ciphertext):
+    # Ubah kunci ke huruf kapital.
+    key = key.upper()
+    # Inisialisasi key_index untuk lacak posisi kunci.
+    key_index = 0
+
+    # Iterasi setiap karakter di ciphertext.
+    for char in ciphertext:
+        # Periksa apakah karakter adalah alfabet.
         if char.isalpha():
-            shift = ord(key[i % key_length]) - ord('A')
+            # Hitung geseran dari kunci, sama seperti enkripsi.
+            shift = ord(key[key_index % len(key)]) - ord('A')
+            # Tentukan base: ASCII 'A' (kapital) atau 'a' (kecil).
             base = ord('A') if char.isupper() else ord('a')
-            decrypted.append(chr((ord(char) - base - shift) % 26 + base))
+            # Dekripsi: balikkan geseran, modulo 26, ubah ke karakter.
+            decrypted_char = chr((ord(char) - base - shift) % 26 + base)
+            # Tambah karakter didekripsi ke decrypted.
+            decrypted.append(decrypted_char)
+            # Tambah key_index untuk karakter kunci berikutnya.
+            key_index += 1
+        # Jika bukan alfabet:
         else:
+            # Tambah karakter langsung ke decrypted tanpa perubahan.
             decrypted.append(char)
+    # Gabungkan decrypted jadi string hasil dekripsi.
     return ''.join(decrypted)
 
 # --- AES ---
@@ -69,13 +99,16 @@ uploaded_file = st.file_uploader("📂 Upload file (.txt)", type=["txt"])
 key = st.text_input("🔑 Masukkan Kunci (Digunakan untuk semua lapisan)")
 mode = st.radio("Pilih Mode:", ["Enkripsi", "Dekripsi"])
 
+# Memeriksa apakah file telah diunggah dan kunci telah dimasukkan.
 if uploaded_file and key:
+    # Membaca isi file yang diunggah dan mengubahnya dari bytes ke string dengan encoding UTF-8.
     content = uploaded_file.read().decode('utf-8')
 
     if st.button("🚀 Proses Sekarang"):
         try:
             if mode == "Enkripsi":
                 # Step 1: Vigenère
+                # Langkah 1: Enkripsi teks menggunakan fungsi vigenere_encrypt dengan content dan key.
                 step1 = vigenere_encrypt(content, key)
                 st.text_area("🔐 Hasil Enkripsi Vigenère:", step1, height=150)
 
@@ -101,6 +134,7 @@ if uploaded_file and key:
                 st.text_area("🔓 Hasil Dekripsi AES:", step2, height=150)
 
                 # Step 3: Vigenère
+                # Langkah 3: Dekripsi hasil AES (step2) menggunakan fungsi vigenere_decrypt.
                 result = vigenere_decrypt(step2, key)
                 st.text_area("🔓 Hasil Dekripsi Vigenère (Final):", result, height=150)
 
