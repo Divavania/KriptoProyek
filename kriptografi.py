@@ -4,7 +4,7 @@ from Crypto.Util.Padding import pad, unpad
 import base64
 import hashlib
 
-# --- Vigenère Cipher (Simplified) ---
+# --- Vigenère Cipher ---
 def vigenere_encrypt(plaintext, key):
     key = key.upper()
     encrypted = []
